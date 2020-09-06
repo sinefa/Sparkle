@@ -81,13 +81,13 @@ static const NSTimeInterval SUAutomaticUpdatePromptImpatienceTimer = 60 * 60 * 2
     [processInfo disableSuddenTermination];
 
     self.willUpdateOnTermination = YES;
-
+    BOOL relaunch = NO;
+    BOOL showUI = NO;
+    
     id<SUUpdaterPrivate> updater = self.updater;
     id<SUUpdaterDelegate> updaterDelegate = [updater delegate];
     if ([updaterDelegate respondsToSelector:@selector(updater:willInstallUpdateOnQuit:immediateInstallationInvocation:)])
     {
-        BOOL relaunch = YES;
-        BOOL showUI = NO;
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[[self class] instanceMethodSignatureForSelector:@selector(installWithToolAndRelaunch:displayingUserInterface:)]];
         [invocation setSelector:@selector(installWithToolAndRelaunch:displayingUserInterface:)];
         [invocation setArgument:&relaunch atIndex:2];
@@ -99,7 +99,7 @@ static const NSTimeInterval SUAutomaticUpdatePromptImpatienceTimer = 60 * 60 * 2
     else if ([updaterDelegate respondsToSelector:@selector(updater:willInstallUpdateOnQuit:immediateInstallationBlock:)])
     {
         [updaterDelegate updater:self.updater willInstallUpdateOnQuit:self.updateItem immediateInstallationBlock:^{
-            [self installWithToolAndRelaunch:YES displayingUserInterface:NO];
+            [self installWithToolAndRelaunch:relaunch displayingUserInterface:showUI];
         }];
     }
 

@@ -183,7 +183,7 @@
 
 - (BOOL)itemContainsValidUpdate:(SUAppcastItem *)ui
 {
-    return ui && [self hostSupportsItem:ui] && [self isItemNewer:ui] && ![self itemContainsSkippedVersion:ui];
+    return ui && [self hostSupportsItem:ui] && ![self itemContainsSkippedVersion:ui];
 }
 
 - (void)appcastDidFinishLoading:(SUAppcast *)ac

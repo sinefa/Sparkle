@@ -174,6 +174,11 @@
     return [[self versionComparator] compareVersion:[self.host version] toVersion:[ui versionString]] == NSOrderedAscending;
 }
 
+- (BOOL)isItemSameVersion:(SUAppcastItem *)ui
+{
+    return [[self versionComparator] compareVersion:[self.host version] toVersion:[ui versionString]] == NSOrderedSame;
+}
+
 - (BOOL)itemContainsSkippedVersion:(SUAppcastItem *)ui
 {
     NSString *skippedVersion = [self.host objectForUserDefaultsKey:SUSkippedVersionKey];
@@ -183,7 +188,7 @@
 
 - (BOOL)itemContainsValidUpdate:(SUAppcastItem *)ui
 {
-    return ui && [self hostSupportsItem:ui] && ![self itemContainsSkippedVersion:ui];
+    return ui && [self hostSupportsItem:ui] && ![self isItemSameVersion:ui] && ![self itemContainsSkippedVersion:ui];
 }
 
 - (void)appcastDidFinishLoading:(SUAppcast *)ac

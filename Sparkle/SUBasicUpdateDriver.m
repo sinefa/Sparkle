@@ -215,16 +215,11 @@
             self.nonDeltaUpdateItem = [[updater delegate] bestValidUpdateInAppcast:[ac copyWithoutDeltaUpdates] forUpdater:self.updater];
         }
     }
-    else // If not, we'll take care of it ourselves.
+    else
     {
-        // Find the best supported update
-        SUAppcastItem *deltaUpdateItem = nil;
-        item = [self bestItemFromAppcastItems:ac.items getDeltaItem:&deltaUpdateItem withHostVersion:self.host.version comparator:[self versionComparator]];
-
-        if (item && deltaUpdateItem) {
-            self.nonDeltaUpdateItem = item;
-            item = deltaUpdateItem;
-        }
+        self.updateItem = nil;
+        [self performSelectorOnMainThread:@selector(didNotFindUpdate) withObject:nil waitUntilDone:NO];
+        return;
     }
 
     self.latestAppcastItem = item;
